@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NFA to DFA Studio - [Retro Windows]</title>
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+    <!-- Google Fonts for retro serif & monospace styling -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+    <!-- Header Application Window -->
+    <header class="app-header">
+        <div class="retro-window">
+            <div class="window-titlebar">
+                <div class="window-title-group">
+                    <i class="fa-solid fa-desktop window-icon"></i>
+                    <span>NFA to DFA Converter - [Automata Studio]</span>
+                </div>
+                <div class="window-controls">
+                    <span class="win-btn" title="Minimize">_</span>
+                    <span class="win-btn" title="Maximize">□</span>
+                    <span class="win-btn" title="Close">✕</span>
+                </div>
+            </div>
+            
+            <div class="window-menubar">
+                <span><u>F</u>ile</span>
+                <span><u>E</u>dit</span>
+                <span><u>S</u>earch</span>
+                <span><u>A</u>lgorithm</span>
+                <span><u>H</u>elp</span>
+            </div>
+
+            <div class="window-toolbar-strip">
+                <span class="toolbar-label">Address:</span>
+                <div class="retro-select-wrapper">
+                    <select id="sampleSelect" title="Select preset automaton">
+                        <option value="sample1">Ends with '01'</option>
+                        <option value="sample2">Epsilon-NFA (a*b*c*)</option>
+                        <option value="sample3">Substring '00' or '11'</option>
+                        <option value="sample4">Starts 'a', ends 'b' (Dead State)</option>
+                        <option value="sample5">Contains '01'</option>
+                        <option value="sample6">Even number of 0s</option>
+                    </select>
+                </div>
+                <button type="button" id="resetAllBtn" class="btn btn-sm" title="Clear inputs">
+                    <i class="fa-solid fa-arrow-rotate-left"></i> Reset
+                </button>
+            </div>
+
+            <div class="window-content">
+                <div class="hero-box">
+                    <h1 class="retro-hero-title">welcome to automata studio!</h1>
+                    <p class="retro-hero-desc">Interactive NFA to DFA Subset Construction with &epsilon;-closure resolution and parallel language equivalence testing.</p>
+                </div>
+
+                <!-- Error / Notification banner -->
+                <div id="errorAlert" class="alert alert-error" style="display: none;">
+                    <i class="fa-solid fa-triangle-exclamation alert-icon"></i>
+                    <div class="alert-content">
+                        <strong id="errorTitle">System Error</strong>
+                        <p id="errorMessage">Please check your machine definition.</p>
+                    </div>
+                    <button type="button" class="alert-close" onclick="hideError()">&times;</button>
+                </div>
+
+                <!-- Section 1: NFA Input Section -->
+                <fieldset class="retro-groupbox">
+                    <legend class="retro-legend">Machine Specification: Q, &Sigma;, q0, F</legend>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="statesInput">States Q:</label>
+                            <input type="text" id="statesInput" class="text-input" value="q0, q1, q2" placeholder="e.g. q0, q1, q2">
+                            <span class="input-hint">Comma-separated states</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="alphabetInput">Alphabet &Sigma;:</label>
+                            <input type="text" id="alphabetInput" class="text-input" value="0, 1" placeholder="e.g. 0, 1">
+                            <span class="input-hint">Symbols (&epsilon; handled automatically)</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="startStateInput">Start State q0:</label>
+                            <input type="text" id="startStateInput" class="text-input" value="q0" placeholder="e.g. q0">
+                            <span class="input-hint">Initial state</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="finalStatesInput">Final States F:</label>
+                            <input type="text" id="finalStatesInput" class="text-input" value="q2" placeholder="e.g. q2">
+                            <span class="input-hint">Accepting states</span>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 6px;">
+                        <label class="toggle-control">
+                            <input type="checkbox" id="includeDeadStateCheck" checked>
+                            <span>Include Dead / Trap State (&empty;) for incomplete transitions</span>
+                        </label>
+                    </div>
+                </fieldset>
+
+                <!-- Transition Editor -->
+                <fieldset class="retro-groupbox">
+                    <legend class="retro-legend">Transition Function: &delta;: Q &times; (&Sigma; &cup; {&epsilon;}) &rarr; P(Q)</legend>
+                    <div class="transition-editor-header">
+                        <span class="editor-subtext">Enter transitions below. Multiple destinations can be comma-separated (e.g. <code>q0, q1</code>). Use <code>&epsilon;</code> for epsilon.</span>
+                        <button type="button" id="addTransitionBtn" class="btn btn-sm">
+                            <i class="fa-solid fa-plus"></i> Add Row
+                        </button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="editor-table" id="transitionsTable">
+                            <thead>
+                                <tr>
+                                    <th style="width: 28%;">From State</th>
+                                    <th style="width: 24%;">Input Symbol</th>
+                                    <th style="width: 38%;">Destination State(s)</th>
+                                    <th style="width: 10%; text-align: center;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transitionsBody">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="action-bar">
+                        <button type="button" id="convertBtn" class="btn btn-primary btn-lg">
+                            <i class="fa-solid fa-play"></i> Convert to DFA
+                        </button>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <!-- Section 2: Results Section -->
+        <section class="results-section" id="resultsSection" style="display: none;">
+            
+            <!-- Side-by-side Diagram Windows -->
+            <div class="diagrams-grid">
+                <!-- Original NFA Window -->
+                <div class="retro-window">
+                    <div class="window-titlebar">
+                        <div class="window-title-group">
+                            <i class="fa-solid fa-draw-polygon window-icon"></i>
+                            <span>Original_NFA.bmp - [State Diagram]</span>
+                        </div>
+                        <div class="window-controls">
+                            <span class="win-btn">_</span>
+                            <span class="win-btn">□</span>
+                            <span class="win-btn">✕</span>
+                        </div>
+                    </div>
+                    <div class="window-toolbar-strip" style="justify-content: space-between;">
+                        <div class="diagram-info-bar" style="margin-bottom: 0; border: none; padding: 0;">
+                            <span>States: <b id="nfaStateCount">-</b></span> |
+                            <span>Start: <b id="nfaStartDisplay">-</b></span> |
+                            <span>Final: <b id="nfaFinalDisplay">-</b></span>
+                            <span id="nfaEpsBadge" style="display:none; color: #5c3d75;">(&epsilon;)</span>
+                        </div>
+                        <div class="diagram-toolbar">
+                            <button type="button" class="btn btn-xs" id="downloadNfaSvgBtn" title="Download Vector SVG">
+                                <i class="fa-solid fa-download"></i> SVG
+                            </button>
+                            <button type="button" class="btn btn-xs" onclick="zoomDiagram('nfaSvgContainer', 1.2)" title="Zoom In">+</button>
+                            <button type="button" class="btn btn-xs" onclick="zoomDiagram('nfaSvgContainer', 0.8)" title="Zoom Out">-</button>
+                            <button type="button" class="btn btn-xs" onclick="resetZoomDiagram('nfaSvgContainer')" title="Reset">1:1</button>
+                        </div>
+                    </div>
+                    <div class="window-content" style="padding: 4px;">
+                        <div class="svg-viewport" id="nfaViewport">
+                            <div class="svg-container" id="nfaSvgContainer">
+                                <!-- NFA SVG -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Converted DFA Window -->
+                <div class="retro-window">
+                    <div class="window-titlebar">
+                        <div class="window-title-group">
+                            <i class="fa-solid fa-diagram-project window-icon"></i>
+                            <span>Converted_DFA.bmp - [State Diagram]</span>
+                        </div>
+                        <div class="window-controls">
+                            <span class="win-btn">_</span>
+                            <span class="win-btn">□</span>
+                            <span class="win-btn">✕</span>
+                        </div>
+                    </div>
+                    <div class="window-toolbar-strip" style="justify-content: space-between;">
+                        <div class="diagram-info-bar" style="margin-bottom: 0; border: none; padding: 0;">
+                            <span>States: <b id="dfaStateCount">-</b></span> |
+                            <span>Start: <b id="dfaStartDisplay">-</b></span> |
+                            <span>Final: <b id="dfaFinalDisplay">-</b></span>
+                            <span id="dfaDeadBadge" style="display:none; color: #942828;">(&empty;)</span>
+                        </div>
+                        <div class="diagram-toolbar">
+                            <button type="button" class="btn btn-xs" id="downloadDfaSvgBtn" title="Download Vector SVG">
+                                <i class="fa-solid fa-download"></i> SVG
+                            </button>
+                            <button type="button" class="btn btn-xs" onclick="zoomDiagram('dfaSvgContainer', 1.2)" title="Zoom In">+</button>
+                            <button type="button" class="btn btn-xs" onclick="zoomDiagram('dfaSvgContainer', 0.8)" title="Zoom Out">-</button>
+                            <button type="button" class="btn btn-xs" onclick="resetZoomDiagram('dfaSvgContainer')" title="Reset">1:1</button>
+                        </div>
+                    </div>
+                    <div class="window-content" style="padding: 4px;">
+                        <div class="svg-viewport" id="dfaViewport">
+                            <div class="svg-container" id="dfaSvgContainer">
+                                <!-- DFA SVG -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transition Tables Window -->
+            <div class="retro-window">
+                <div class="window-titlebar">
+                    <div class="window-title-group">
+                        <i class="fa-solid fa-table window-icon"></i>
+                        <span>Transition_Matrices.xls - [NFA and DFA Comparison]</span>
+                    </div>
+                    <div class="window-controls">
+                        <span class="win-btn">_</span>
+                        <span class="win-btn">□</span>
+                        <span class="win-btn">✕</span>
+                    </div>
+                </div>
+                <div class="window-content">
+                    <div class="tables-grid" style="margin-bottom: 0;">
+                        <div>
+                            <strong style="display: block; margin-bottom: 4px; font-size: 11px;">Original NFA Matrix:</strong>
+                            <div class="table-responsive">
+                                <table class="data-table" id="nfaDisplayTable"></table>
+                            </div>
+                        </div>
+                        <div>
+                            <strong style="display: block; margin-bottom: 4px; font-size: 11px;">Equivalent DFA Matrix:</strong>
+                            <div class="table-responsive">
+                                <table class="data-table" id="dfaDisplayTable"></table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Algorithm Steps Window -->
+            <div class="retro-window" id="stepsCard">
+                <div class="window-titlebar">
+                    <div class="window-title-group">
+                        <i class="fa-solid fa-file-lines window-icon"></i>
+                        <span>Subset_Construction_Trace.log - [Step-by-Step Mathematical Log]</span>
+                    </div>
+                    <div class="window-controls">
+                        <button type="button" class="win-btn" id="toggleStepsBtn" onclick="toggleStepsVisibility()" title="Toggle View">
+                            <i class="fa-solid fa-chevron-up" id="stepsChevron"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="window-content">
+                    <div class="steps-container" id="stepsContainer">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- String Testing Console Window -->
+            <div class="retro-window" id="testingCard">
+                <div class="window-titlebar">
+                    <div class="window-title-group">
+                        <i class="fa-solid fa-terminal window-icon"></i>
+                        <span>String_Simulator.exe - [Equivalence Verifier]</span>
+                    </div>
+                    <div class="window-controls">
+                        <span class="win-btn">_</span>
+                        <span class="win-btn">□</span>
+                        <span class="win-btn">✕</span>
+                    </div>
+                </div>
+                <div class="window-content">
+                    <div class="testing-intro">
+                        Test input strings over alphabet <code id="testAlphabetDisplay">&Sigma;</code> simultaneously on both machines:
+                    </div>
+
+                    <div class="string-input-bar">
+                        <div class="input-with-actions">
+                            <input type="text" id="testStringInput" class="text-input" placeholder="e.g. 0101">
+                            <button type="button" class="btn btn-xs" id="quickEmptyStringBtn" title="Test empty string">
+                                &epsilon; (Empty)
+                            </button>
+                        </div>
+                        <button type="button" id="testStringBtn" class="btn btn-primary">
+                            <i class="fa-solid fa-play"></i> Test String
+                        </button>
+                    </div>
+
+                    <div class="quick-test-strings" id="quickTestStringsContainer">
+                        <span class="quick-test-label">Presets:</span>
+                        <div class="pills-wrapper" id="sampleTestPills"></div>
+                    </div>
+
+                    <div id="testResultBanner" class="test-result-banner" style="display: none;">
+                        <div class="banner-status-line">
+                            <div>
+                                <span class="status-badge" id="testStatusBadge">ACCEPTED</span>
+                                <span class="match-badge" id="testMatchBadge">
+                                    <i class="fa-solid fa-circle-check"></i> Machines Agree
+                                </span>
+                            </div>
+                            <span id="evaluatedStringDisplay" style="font-family: var(--font-mono); font-size: 11px;"></span>
+                        </div>
+
+                        <div class="traces-grid">
+                            <div class="trace-column">
+                                <div class="trace-header">
+                                    <span>NFA Trace</span>
+                                    <span class="status-badge" id="nfaTraceStatus">ACCEPTED</span>
+                                </div>
+                                <div class="trace-body" id="nfaTraceBody"></div>
+                            </div>
+
+                            <div class="trace-column">
+                                <div class="trace-header">
+                                    <span>DFA Trace</span>
+                                    <span class="status-badge" id="dfaTraceStatus">ACCEPTED</span>
+                                </div>
+                                <div class="trace-body" id="dfaTraceBody"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- Retro Windows Taskbar -->
+    <footer class="retro-taskbar">
+        <div class="taskbar-left">
+            <button type="button" class="start-button">
+                <i class="fa-solid fa-bars-progress" style="color: #4a5d4c;"></i>
+                <span>Start</span>
+            </button>
+            <div class="taskbar-items">
+                <span class="task-item"><i class="fa-solid fa-gear"></i> NFA_to_DFA.exe</span>
+                <span class="task-item"><i class="fa-solid fa-diagram-project"></i> Viewer.bmp</span>
+            </div>
+        </div>
+        <div class="taskbar-tray" id="taskbarClock">
+            <i class="fa-regular fa-clock" style="margin-right: 4px;"></i>
+            <span id="liveClock">4:20 PM</span>
+        </div>
+    </footer>
+
+    <!-- App JavaScript -->
+    <script src="/static/script.js"></script>
+    <script>
+        // Update live retro clock in taskbar
+        function updateRetroClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12 || 12;
+            const clockEl = document.getElementById("liveClock");
+            if (clockEl) {
+                clockEl.innerText = `${hours}:${minutes} ${ampm}`;
+            }
+        }
+        updateRetroClock();
+        setInterval(updateRetroClock, 30000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!-- Retro Window Frame -->
+  <rect x="1" y="1" width="30" height="30" fill="#c5cdc2" stroke="#f0f4ee" stroke-width="1.5"/>
+  <path d="M 31 1 L 31 31 L 1 31" stroke="#3e483e" stroke-width="1.5" fill="none"/>
+  <!-- Titlebar -->
+  <rect x="3" y="3" width="26" height="6" fill="#4d5e4f"/>
+  <!-- Close button -->
+  <rect x="25" y="4" width="3" height="4" fill="#c5cdc2"/>
+  <!-- Sunken Canvas -->
+  <rect x="3" y="10" width="26" height="19" fill="#f5efe4" stroke="#6e7a6d" stroke-width="1"/>
+  <!-- Automata Nodes in Canvas -->
+  <circle cx="10" cy="19" r="4" fill="#ffffff" stroke="#2e3d33" stroke-width="1.2"/>
+  <path d="M 14 19 L 20 19" stroke="#3a4d3c" stroke-width="1.2"/>
+  <circle cx="23" cy="19" r="4" fill="#e8f2e9" stroke="#1f6636" stroke-width="1.2"/>
+  <circle cx="23" cy="19" r="2.5" fill="#e8f2e9" stroke="#1f6636" stroke-width="0.8"/>
+</svg>

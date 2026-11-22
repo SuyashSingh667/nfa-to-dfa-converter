@@ -1,0 +1,813 @@
+/* ==========================================================================
+   Retro Windows 95/98 / Lunospace Aesthetic Theme
+   Automata Theory & Computation - NFA to DFA Studio
+   Inspired by vintage OS desktop, sage floral wallpaper & beveled windows.
+   ========================================================================== */
+
+:root {
+    --win-bg: #c5cdc2;
+    --win-border-light: #f0f4ee;
+    --win-border-dark: #3e483e;
+    --win-border-shadow: #283028;
+    
+    --win-titlebar: #4d5e4f;
+    --win-titlebar-text: #ffffff;
+    
+    --canvas-bg: #f5efe4;
+    --canvas-sunken-border-dark: #6e7a6d;
+    --canvas-sunken-border-light: #ffffff;
+    
+    --input-bg: #ffffff;
+    --input-text: #111a12;
+    --input-border-dark: #647063;
+    --input-border-light: #ffffff;
+    
+    --btn-bg: #c5cdc2;
+    --btn-text: #151f16;
+    
+    --accent-blue: #1a4971;
+    --accent-green: #1f6636;
+    --accent-red: #942828;
+    --accent-purple: #5c3d75;
+    
+    --font-ui: 'MS Sans Serif', Tahoma, Geneva, Verdana, sans-serif;
+    --font-serif: 'Playfair Display', 'Times New Roman', Georgia, serif;
+    --font-mono: 'Courier New', Courier, monospace;
+
+    --cursor-custom: url('/static/cursor/black_bow_tooth_20.cur') 10 10, url('/static/cursor/cursor_20.png') 10 10, auto;
+    --cursor-pointer: url('/static/cursor/black_bow_tooth_20.cur') 10 10, url('/static/cursor/cursor_20.png') 10 10, pointer;
+}
+
+/* Custom Black Bow Tooth Cursor */
+html, body, * {
+    cursor: var(--cursor-custom);
+}
+
+a, button, select, input, .btn, .win-btn, .test-pill, label, .retro-address-select {
+    cursor: var(--cursor-pointer);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #8da08e;
+    background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%3E%0A%3Crect%20width%3D%2260%22%20height%3D%2260%22%20fill%3D%22%238da08e%22/%3E%0A%3Cpath%20d%3D%22M30%2010%20C27%2015%2020%2018%2020%2025%20C20%2032%2026%2035%2030%2042%20C34%2035%2040%2032%2040%2025%20C40%2018%2033%2015%2030%2010%20Z%22%20fill%3D%22%23819382%22%20opacity%3D%220.6%22/%3E%0A%3Cpath%20d%3D%22M30%2020%20C28%2023%2025%2025%2025%2028%20C25%2031%2028%2033%2030%2036%20C32%2033%2035%2031%2035%2028%20C35%2025%2032%2023%2030%2020%20Z%22%20fill%3D%22%239ab09b%22%20opacity%3D%220.5%22/%3E%0A%3Ccircle%20cx%3D%2230%22%20cy%3D%2228%22%20r%3D%222.5%22%20fill%3D%22%23f0eee6%22%20opacity%3D%220.5%22/%3E%0A%3Cpath%20d%3D%22M0%200%20C5%207%2012%2010%2012%2015%20C12%2020%205%2023%200%2030%20C-5%2023%20-12%2020%20-12%2015%20C-12%2010%20-5%207%200%200%20Z%22%20fill%3D%22%23819382%22%20opacity%3D%220.6%22%20transform%3D%22translate%280%2C%200%29%22/%3E%0A%3Cpath%20d%3D%22M60%200%20C65%207%2072%2010%2072%2015%20C72%2020%2065%2023%2060%2030%20C55%2023%2048%2020%2048%2015%20C48%2010%2055%207%2060%200%20Z%22%20fill%3D%22%23819382%22%20opacity%3D%220.6%22%20transform%3D%22translate%280%2C%200%29%22/%3E%0A%3Cpath%20d%3D%22M0%2060%20C5%2053%2012%2050%2012%2045%20C12%2040%205%2037%200%2030%20C-5%2037%20-12%2040%20-12%2045%20C-12%2050%20-5%2053%200%2060%20Z%22%20fill%3D%22%23819382%22%20opacity%3D%220.6%22%20transform%3D%22translate%280%2C%200%29%22/%3E%0A%3Cpath%20d%3D%22M60%2060%20C65%2053%2072%2050%2072%2045%20C72%2040%2065%2037%2060%2030%20C55%2037%2048%2040%2048%2045%20C48%2050%2055%2053%2060%2060%20Z%22%20fill%3D%22%23819382%22%20opacity%3D%220.6%22%20transform%3D%22translate%280%2C%200%29%22/%3E%0A%3C/svg%3E");
+    color: var(--input-text);
+    font-family: var(--font-ui);
+    font-size: 12px;
+    line-height: 1.4;
+    min-height: 100vh;
+    padding-bottom: 45px; /* Room for retro taskbar */
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ==========================================================================
+   Retro Windows Container
+   ========================================================================== */
+
+.retro-window, .card {
+    background: var(--win-bg);
+    border: 2px solid;
+    border-color: var(--win-border-light) var(--win-border-dark) var(--win-border-dark) var(--win-border-light);
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.35);
+    margin-bottom: 1.5rem;
+    padding: 3px;
+    border-radius: 0;
+}
+
+/* Title bar */
+.window-titlebar {
+    background: var(--win-titlebar);
+    color: var(--win-titlebar-text);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 3px 5px 3px 6px;
+    font-weight: bold;
+    font-size: 11px;
+    letter-spacing: 0.02em;
+    user-select: none;
+}
+
+.window-title-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.window-icon {
+    font-size: 11px;
+    color: #e5ece3;
+}
+
+.window-controls {
+    display: flex;
+    gap: 2px;
+}
+
+.win-btn {
+    width: 16px;
+    height: 14px;
+    background: var(--btn-bg);
+    border: 1px solid;
+    border-color: var(--win-border-light) var(--win-border-shadow) var(--win-border-shadow) var(--win-border-light);
+    color: #111;
+    font-size: 9px;
+    font-weight: bold;
+    line-height: 12px;
+    text-align: center;
+    cursor: default;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.win-btn:active {
+    border-color: var(--win-border-shadow) var(--win-border-light) var(--win-border-light) var(--win-border-shadow);
+}
+
+/* Menu Bar */
+.window-menubar {
+    background: var(--win-bg);
+    padding: 3px 6px;
+    display: flex;
+    gap: 14px;
+    font-size: 11px;
+    border-bottom: 1px solid var(--canvas-sunken-border-dark);
+    margin-bottom: 3px;
+    color: #1a241b;
+}
+
+.window-menubar span {
+    cursor: pointer;
+}
+
+.window-menubar u {
+    text-decoration: underline;
+}
+
+/* Address / Toolbar Strip */
+.window-toolbar-strip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 6px;
+    background: var(--win-bg);
+    border-bottom: 1px solid var(--canvas-sunken-border-dark);
+    margin-bottom: 3px;
+    font-size: 11px;
+}
+
+.toolbar-label {
+    font-weight: bold;
+    color: #2e3b2f;
+}
+
+.retro-select-wrapper select {
+    background: #ffffff;
+    border: 2px solid;
+    border-color: var(--input-border-dark) var(--input-border-light) var(--input-border-light) var(--input-border-dark);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    padding: 2px 4px;
+    color: #111;
+    outline: none;
+    cursor: pointer;
+}
+
+/* Window Content Canvas (Sunken Parchment Area) */
+.window-content, .card-header, .form-grid, .transition-editor-section {
+    background: var(--canvas-bg);
+    color: #1a241b;
+}
+
+.window-content {
+    border: 2px solid;
+    border-color: var(--canvas-sunken-border-dark) var(--canvas-sunken-border-light) var(--canvas-sunken-border-light) var(--canvas-sunken-border-dark);
+    padding: 1rem 1.25rem;
+}
+
+/* ==========================================================================
+   Header Window (Main Application Host)
+   ========================================================================== */
+
+.app-header {
+    max-width: 1200px;
+    margin: 1rem auto 0 auto;
+    padding: 0 1rem;
+}
+
+.hero-box {
+    padding: 0.5rem 0.25rem 0.75rem 0.25rem;
+    border-bottom: 1px dotted #8fa08e;
+    margin-bottom: 1rem;
+}
+
+.retro-hero-title {
+    font-family: var(--font-serif);
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #2c382d;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.2rem;
+}
+
+.retro-hero-desc {
+    font-family: var(--font-ui);
+    font-size: 11px;
+    color: #4a5c4c;
+}
+
+/* ==========================================================================
+   Main Content Layout
+   ========================================================================== */
+
+.main-content {
+    max-width: 1200px;
+    margin: 0.75rem auto 2rem auto;
+    padding: 0 1rem;
+}
+
+/* Fieldsets (Classic Win95 Group Box) */
+.retro-groupbox {
+    border: 2px groove #ffffff;
+    padding: 0.75rem 1rem 1rem 1rem;
+    margin-bottom: 1rem;
+    background: transparent;
+}
+
+.retro-legend {
+    font-weight: bold;
+    font-size: 11px;
+    color: #2e3e30;
+    padding: 0 4px;
+}
+
+/* Form Grid */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    background: transparent;
+    margin-bottom: 0.75rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.form-group label {
+    font-size: 11px;
+    font-weight: bold;
+    color: #253326;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.text-input {
+    background: var(--input-bg);
+    color: var(--input-text);
+    border: 2px solid;
+    border-color: var(--input-border-dark) var(--input-border-light) var(--input-border-light) var(--input-border-dark);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    padding: 3px 6px;
+    outline: none;
+    border-radius: 0;
+    width: 100%;
+}
+
+.text-input:focus {
+    background: #fffffa;
+}
+
+.input-hint {
+    font-size: 10px;
+    color: #647565;
+}
+
+/* Toggle Switch Control (Retro Checkbox Style) */
+.toggle-control {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: bold;
+    cursor: pointer;
+    user-select: none;
+    color: #2c382d;
+}
+
+.toggle-slider {
+    display: none;
+}
+
+.toggle-control input[type="checkbox"] {
+    display: inline-block !important;
+    width: 14px;
+    height: 14px;
+    accent-color: #4d5e4f;
+    cursor: pointer;
+}
+
+/* Transition Editor Section */
+.transition-editor-section {
+    background: transparent;
+    border: none;
+    padding: 0;
+}
+
+.transition-editor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.transition-editor-header h3 {
+    font-size: 12px;
+    font-weight: bold;
+    color: #2e3e30;
+}
+
+.editor-subtext {
+    font-size: 11px;
+    color: #556656;
+    margin-bottom: 0.5rem;
+}
+
+.table-responsive {
+    overflow-x: auto;
+    margin-bottom: 0.75rem;
+}
+
+/* Retro Data Grid Tables */
+.editor-table, .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+    background: #ffffff;
+    border: 2px solid;
+    border-color: var(--canvas-sunken-border-dark) var(--canvas-sunken-border-light) var(--canvas-sunken-border-light) var(--canvas-sunken-border-dark);
+}
+
+.editor-table th, .data-table th {
+    background: var(--win-bg);
+    color: #111;
+    border: 2px solid;
+    border-color: var(--win-border-light) var(--win-border-dark) var(--win-border-dark) var(--win-border-light);
+    padding: 3px 6px;
+    text-align: left;
+    font-weight: bold;
+    font-size: 11px;
+}
+
+.editor-table td, .data-table td {
+    border: 1px solid #c9d1c7;
+    padding: 4px 6px;
+    font-family: var(--font-mono);
+    color: #1a241b;
+}
+
+.data-table tr.highlight-final td {
+    background-color: #eaf5eb;
+    color: #164e26;
+    font-weight: bold;
+}
+
+.data-table tr.highlight-dead td {
+    background-color: #fcedec;
+    color: #8b2626;
+}
+
+/* Retro Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    background: var(--btn-bg);
+    color: #111;
+    font-family: var(--font-ui);
+    font-size: 11px;
+    font-weight: bold;
+    padding: 3px 10px;
+    border: 2px solid;
+    border-color: var(--win-border-light) var(--win-border-shadow) var(--win-border-shadow) var(--win-border-light);
+    border-radius: 0;
+    cursor: pointer;
+    text-decoration: none;
+    user-select: none;
+}
+
+.btn:hover {
+    background: #d0d8cd;
+}
+
+.btn:active {
+    border-color: var(--win-border-shadow) var(--win-border-light) var(--win-border-light) var(--win-border-shadow);
+    padding: 4px 9px 2px 11px; /* Subtle 1px depression */
+}
+
+.btn-primary {
+    background: #c5cdc2;
+    border-color: var(--win-border-light) var(--win-border-shadow) var(--win-border-shadow) var(--win-border-light);
+    color: #111;
+    font-weight: bold;
+}
+
+.btn-sm, .btn-xs {
+    padding: 2px 6px;
+    font-size: 10px;
+}
+
+.btn-lg {
+    padding: 5px 14px;
+    font-size: 12px;
+}
+
+.action-bar {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+}
+
+/* ==========================================================================
+   Diagrams Viewport Windows (CAD / Graph Viewer style)
+   ========================================================================== */
+
+.diagrams-grid, .tables-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+@media (max-width: 900px) {
+    .diagrams-grid, .tables-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.diagram-info-bar {
+    display: flex;
+    gap: 12px;
+    font-size: 11px;
+    background: var(--win-bg);
+    border: 2px solid;
+    border-color: var(--input-border-dark) var(--input-border-light) var(--input-border-light) var(--input-border-dark);
+    padding: 3px 6px;
+    margin-bottom: 6px;
+    font-family: var(--font-mono);
+}
+
+.svg-viewport {
+    background: #ffffff;
+    border: 2px solid;
+    border-color: var(--canvas-sunken-border-dark) var(--canvas-sunken-border-light) var(--canvas-sunken-border-light) var(--canvas-sunken-border-dark);
+    min-height: 380px;
+    height: 420px;
+    overflow: hidden;
+    position: relative;
+    cursor: grab;
+}
+
+.svg-viewport:active {
+    cursor: grabbing;
+}
+
+.svg-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ==========================================================================
+   Algorithm Steps (Notebook Log style)
+   ========================================================================== */
+
+.steps-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+.step-item {
+    background: #ffffff;
+    border: 2px solid;
+    border-color: var(--canvas-sunken-border-dark) var(--canvas-sunken-border-light) var(--canvas-sunken-border-light) var(--canvas-sunken-border-dark);
+    padding: 8px 12px;
+}
+
+.step-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 4px;
+}
+
+.step-number-badge {
+    background: var(--win-titlebar);
+    color: #fff;
+    font-weight: bold;
+    font-size: 10px;
+    padding: 1px 5px;
+    border: 1px solid #283028;
+}
+
+.step-title {
+    font-size: 12px;
+    font-weight: bold;
+    color: #233124;
+}
+
+.step-desc {
+    font-size: 11px;
+    color: #4f6150;
+    margin-bottom: 6px;
+}
+
+.step-grid-pill {
+    display: inline-block;
+    background: #f4efe6;
+    border: 1px solid #7c8a7d;
+    padding: 2px 5px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    margin: 2px;
+    color: #1a251b;
+}
+
+/* ==========================================================================
+   String Testing Console
+   ========================================================================== */
+
+.testing-intro {
+    font-size: 11px;
+    margin-bottom: 8px;
+    color: #3b4d3c;
+}
+
+.string-input-bar {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.input-with-actions {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-with-actions input {
+    padding-right: 90px;
+}
+
+.input-with-actions button {
+    position: absolute;
+    right: 3px;
+}
+
+.quick-test-strings {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+.quick-test-label {
+    font-weight: bold;
+    font-size: 10px;
+    color: #495c4a;
+}
+
+.pills-wrapper {
+    display: flex;
+    gap: 3px;
+    flex-wrap: wrap;
+}
+
+.test-pill {
+    background: var(--btn-bg);
+    border: 1px solid;
+    border-color: var(--win-border-light) var(--win-border-shadow) var(--win-border-shadow) var(--win-border-light);
+    color: #111;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    padding: 1px 5px;
+    cursor: pointer;
+}
+
+.test-pill:hover {
+    background: #d5ded2;
+}
+
+.test-result-banner {
+    background: #ffffff;
+    border: 2px solid;
+    border-color: var(--canvas-sunken-border-dark) var(--canvas-sunken-border-light) var(--canvas-sunken-border-light) var(--canvas-sunken-border-dark);
+    padding: 10px;
+    margin-top: 8px;
+}
+
+.banner-status-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px dotted #8fa08e;
+    padding-bottom: 6px;
+    margin-bottom: 8px;
+}
+
+.status-badge {
+    font-weight: bold;
+    font-size: 11px;
+    padding: 2px 6px;
+    border: 1px solid;
+}
+
+.status-badge.accepted {
+    background: #e8f5e9;
+    border-color: #2e7d32;
+    color: #1b5e20;
+}
+
+.status-badge.rejected {
+    background: #ffebee;
+    border-color: #c62828;
+    color: #b71c1c;
+}
+
+.match-badge {
+    font-weight: bold;
+    font-size: 11px;
+    color: #1a4971;
+}
+
+.traces-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+}
+
+.trace-column {
+    background: #fbf9f5;
+    border: 1px solid #7c8a7d;
+    padding: 6px;
+}
+
+.trace-header {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    font-size: 11px;
+    border-bottom: 1px solid #c9d1c7;
+    padding-bottom: 3px;
+    margin-bottom: 4px;
+}
+
+.trace-body {
+    max-height: 240px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.trace-step-row {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    padding: 2px 4px;
+    background: #ffffff;
+    border: 1px solid #e0ded5;
+}
+
+/* ==========================================================================
+   Error Alert Banner
+   ========================================================================== */
+
+.alert {
+    background: #ffebee;
+    border: 2px solid;
+    border-color: #ef9a9a #b71c1c #b71c1c #ef9a9a;
+    padding: 6px 10px;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #b71c1c;
+}
+
+.alert-icon {
+    font-size: 14px;
+}
+
+.alert-content strong {
+    font-weight: bold;
+    font-size: 11px;
+}
+
+.alert-content p {
+    font-size: 11px;
+}
+
+.alert-close {
+    margin-left: auto;
+    background: none;
+    border: none;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #b71c1c;
+}
+
+/* ==========================================================================
+   Retro Bottom Taskbar (Windows 95/98 Style)
+   ========================================================================== */
+
+.retro-taskbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 30px;
+    background: var(--win-bg);
+    border-top: 2px solid var(--win-border-light);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2px 4px;
+    z-index: 9999;
+    user-select: none;
+}
+
+.taskbar-left {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.start-button {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--btn-bg);
+    border: 2px solid;
+    border-color: var(--win-border-light) var(--win-border-shadow) var(--win-border-shadow) var(--win-border-light);
+    padding: 2px 6px;
+    font-weight: bold;
+    font-size: 11px;
+    cursor: pointer;
+    height: 24px;
+}
+
+.start-button:active {
+    border-color: var(--win-border-shadow) var(--win-border-light) var(--win-border-light) var(--win-border-shadow);
+}
+
+.taskbar-items {
+    display: flex;
+    gap: 3px;
+}
+
+.task-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: #d0d7cc;
+    border: 2px solid;
+    border-color: var(--win-border-shadow) var(--win-border-light) var(--win-border-light) var(--win-border-shadow);
+    padding: 2px 8px;
+    font-size: 10px;
+    font-weight: bold;
+    height: 24px;
+    color: #111;
+}
+
+.taskbar-tray {
+    border: 2px solid;
+    border-color: var(--canvas-sunken-border-dark) var(--canvas-sunken-border-light) var(--canvas-sunken-border-light) var(--canvas-sunken-border-dark);
+    padding: 2px 8px;
+    font-size: 10px;
+    font-family: var(--font-ui);
+    color: #111;
+    background: var(--win-bg);
+    height: 22px;
+    display: flex;
+    align-items: center;
+}
